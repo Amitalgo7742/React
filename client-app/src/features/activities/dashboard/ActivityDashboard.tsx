@@ -5,27 +5,11 @@ import ActivityList from './ActivityList';
 import ActivityDetails from '../details/ActivityDetails';
 import ActivityForm from '../form/ActivityForm';
 import { useStore } from '../../../app/stores/store';
+import { observer } from 'mobx-react-lite';
 
-interface IProps {
-  activities: Activity[];
-  
 
+const ActivityDashboard: React.FC = ({
   
-  createActivity: (activity: Activity) => void;
-  editActivity: (activity: Activity) => void;
-  deleteActivity: (e: SyntheticEvent<HTMLButtonElement>, id: string) => void;
-  submitting: boolean;
-  target: string;
-}
-
-const ActivityDashboard: React.FC<IProps> = ({
-  activities,
-  
-  createActivity,
-  editActivity,
-  deleteActivity,
-  submitting,
-  target
 }) => {
   const {activityStore}=useStore();
   const {selectedActivity,editMode}=activityStore;
@@ -33,11 +17,7 @@ const ActivityDashboard: React.FC<IProps> = ({
     <Grid>
       <Grid.Column width={10}>
         <ActivityList
-          activities={activities}
-          
-          deleteActivity={deleteActivity}
-          submitting={submitting}
-          target={target}
+         
         />
       </Grid.Column>
       <Grid.Column width={6}>
@@ -51,10 +31,6 @@ const ActivityDashboard: React.FC<IProps> = ({
           <ActivityForm
             key={(selectedActivity && selectedActivity.id) || 0}
            
-           
-            createActivity={createActivity}
-            editActivity={editActivity}
-            submitting={submitting}
           />
         )}
       </Grid.Column>
@@ -62,4 +38,4 @@ const ActivityDashboard: React.FC<IProps> = ({
   );
 };
 
-export default ActivityDashboard;
+export default observer(ActivityDashboard);

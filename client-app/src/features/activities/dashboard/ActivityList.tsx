@@ -1,25 +1,25 @@
-import React, { SyntheticEvent } from 'react';
+import { observer } from 'mobx-react-lite';
+import React, { SyntheticEvent, useState } from 'react';
 import { Item, Button, Label, Segment } from 'semantic-ui-react';
+import { setSyntheticTrailingComments } from 'typescript';
 import { Activity } from '../../../app/models/activity';
 import { useStore } from '../../../app/stores/store';
 
-interface IProps {
-  activities: Activity[];
 
-  deleteActivity: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
-  submitting: boolean;
-  target: string;
-}
+const ActivityList: React.FC = ({
 
-const ActivityList: React.FC<IProps> = ({
-  activities,
  
-  deleteActivity,
-  submitting,
-  target
 }) => {
   const {activityStore}=useStore();
+  const[target,setTarget]=useState('');
+  const {deleteActivity,activities,loading}=activityStore;
+  function handleActivityDelete(e:SyntheticEvent<HTMLButtonElement>, id: string)
+    {
+      setTarget(e.currentTarget.name);
+      deleteActivity(id);
+    }
   return (
+    
     
     <Segment clearing>
       <Item.Group divided>
@@ -43,8 +43,8 @@ const ActivityList: React.FC<IProps> = ({
                 />
                 <Button
                   name={activity.id}
-                  loading={target === activity.id && submitting}
-                  onClick={(e) => deleteActivity(e, activity.id)}
+                  loading={target === activity.id && loading}
+                  onClick={(e) => handleActivityDelete(e, activity.id)}
                   floated='right'
                   content='Delete'
                   color='red'
@@ -59,4 +59,5 @@ const ActivityList: React.FC<IProps> = ({
   );
 };
 
-export default ActivityList;
+export default observer(ActivityList);
+
