@@ -1,10 +1,11 @@
 import React, { SyntheticEvent } from 'react';
 import { Item, Button, Label, Segment } from 'semantic-ui-react';
 import { Activity } from '../../../app/models/activity';
+import { useStore } from '../../../app/stores/store';
 
 interface IProps {
   activities: Activity[];
-  selectActivity: (id: string) => void;
+
   deleteActivity: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
   submitting: boolean;
   target: string;
@@ -12,12 +13,14 @@ interface IProps {
 
 const ActivityList: React.FC<IProps> = ({
   activities,
-  selectActivity,
+ 
   deleteActivity,
   submitting,
   target
 }) => {
+  const {activityStore}=useStore();
   return (
+    
     <Segment clearing>
       <Item.Group divided>
         {activities.map(activity => (
@@ -33,7 +36,7 @@ const ActivityList: React.FC<IProps> = ({
               </Item.Description>
               <Item.Extra>
                 <Button
-                  onClick={() => selectActivity(activity.id)}
+                  onClick={() => activityStore.selectActivity(activity.id)}
                   floated='right'
                   content='View'
                   color='blue'

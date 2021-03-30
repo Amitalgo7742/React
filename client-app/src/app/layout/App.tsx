@@ -1,14 +1,17 @@
 import React, { useState, useEffect, Fragment, SyntheticEvent } from 'react';
-import { Container } from 'semantic-ui-react';
+import {  Container } from 'semantic-ui-react';
 import { Activity } from '../models/activity';
 import NavBar from '../layout/NavBar';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
 import {v4 as uuid} from 'uuid';
 import agent from '../api/agent';
 import LoadingComponent from './LoadingComponent';
+import { useStore } from '../stores/store';
+import { observer } from 'mobx-react-lite';
 
 
 const App = () => {
+  const {activityStore}=useStore();
   const [activities, setActivities] = useState<Activity[]>([]);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
     null
@@ -18,10 +21,7 @@ const App = () => {
   const [submitting, setSubmitting] = useState(false);
   const [target, setTarget] = useState('');
 
-  const handleOpenCreateForm = () => {
-    setSelectedActivity(null);
-    setEditMode(true);
-  }
+  
 
   const handleCreateActivity = (activity: Activity) => {
     setSubmitting(true);
@@ -49,35 +49,24 @@ const App = () => {
     }).then(() => setSubmitting(false));
   }
 
-  const handleSelectActivity = (id: string) => {
-    setSelectedActivity(activities.filter(a => a.id === id)[0]);
-    setEditMode(false);
-  };
-
+ 
   useEffect(() => {
-    agent.Activities.list()
-      .then(response => {
-        let activities: Activity[] = [];
-        response.forEach((activity) => {
-          activity.date = activity.date.split('T')[0]
-          activities.push(activity);
-        })
-        setActivities(activities);
-      }).then(() => setLoading(false));
-  }, []);
+    activityStore.loadActivities();
+  }, [activityStore]);
 
-  if (loading) return <LoadingComponent content='Loading activities' />
+  if (activityStore.loadingInitial) return <LoadingComponent content='Loading activities' />
   return (
     <Fragment>
-      <NavBar openCreateForm={handleOpenCreateForm} />
+      <NavBar />
       <Container style={{ marginTop: '7em' }}>
+        
         <ActivityDashboard
-          activities={activities}
-          selectActivity={handleSelectActivity}
-          selectedActivity={selectedActivity}
-          editMode={editMode}
-          setEditMode={setEditMode}
-          setSelectedActivity={setSelectedActivity}
+          activities={activityStore.activities}
+         
+          
+        
+       
+       
           createActivity={handleCreateActivity}
           editActivity={handleEditActivity}
           deleteActivity={handleDeleteActivity}
@@ -89,4 +78,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default observer(App);
