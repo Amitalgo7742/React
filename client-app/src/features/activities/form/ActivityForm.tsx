@@ -31,10 +31,10 @@ const ActivityForm: React.FC<IProps> = ({
         city: '',
         venue: ''
       };
-    }
+    } 
   };
 
-  const [activity, setActivity] = useState<IActivity>(initializeForm);
+  const [activity, setActivity] = useState<Activity>(initializeForm);
 
   const handleSubmit = () => {
     if (activity.id.length === 0) {
