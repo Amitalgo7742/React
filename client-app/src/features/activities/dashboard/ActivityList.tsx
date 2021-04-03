@@ -1,5 +1,7 @@
 import { observer } from 'mobx-react-lite';
+
 import React, { SyntheticEvent, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Item, Button, Label, Segment } from 'semantic-ui-react';
 import { setSyntheticTrailingComments } from 'typescript';
 import { Activity } from '../../../app/models/activity';
@@ -36,10 +38,11 @@ const ActivityList: React.FC = ({
               </Item.Description>
               <Item.Extra>
                 <Button
-                  onClick={() => activityStore.selectActivity(activity.id)}
+                 as={Link}
+                 to={`/activities/${activity.id}`}
                   floated='right'
                   content='View'
-                  color='blue'
+                  color='blue'  
                 />
                 <Button
                   name={activity.id}
