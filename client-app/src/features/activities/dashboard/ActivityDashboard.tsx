@@ -20,8 +20,6 @@ const ActivityDashboard: React.FC = ({
 
   if (activityStore.loadingInitial) return <LoadingComponent content='Loading activities' />
 
-
-  const {selectedActivity,editMode}=activityStore;
   return (
     <Grid>
       <Grid.Column width={10}>
@@ -30,18 +28,7 @@ const ActivityDashboard: React.FC = ({
         />
       </Grid.Column>
       <Grid.Column width={6}>
-        {selectedActivity && !editMode && (
-          <ActivityDetails
-            
-           
-          />
-        )}
-        {editMode && (
-          <ActivityForm
-            key={(selectedActivity && selectedActivity.id) || 0}
-           
-          />
-        )}
+       <h2> Activity Filters</h2>
       </Grid.Column>
     </Grid>
   );

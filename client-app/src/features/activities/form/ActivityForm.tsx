@@ -11,7 +11,7 @@ const ActivityForm: React.FC = ({
  
 }) => {
   const {activityStore}=useStore();
-  const {selectActivity,closeForm,createActivity,updateActivity,loading}=activityStore;
+  const {createActivity,updateActivity,loading}=activityStore;
   const initializeForm = () => {
    
       return {
@@ -90,7 +90,7 @@ const ActivityForm: React.FC = ({
         />
         <Button loading={loading} floated='right' positive type='submit' content='Submit' />
         <Button
-          onClick={() => closeForm()}
+         
           floated='right'
           type='button'
           content='Cancel'
