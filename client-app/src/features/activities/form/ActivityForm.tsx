@@ -1,9 +1,11 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import { Segment, Form, Button } from 'semantic-ui-react';
 import { Activity } from '../../../app/models/activity';
 import {v4 as uuid} from 'uuid';
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
+import { useParams } from 'react-router-dom';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 
 
@@ -11,22 +13,26 @@ const ActivityForm: React.FC = ({
  
 }) => {
   const {activityStore}=useStore();
-  const {createActivity,updateActivity,loading}=activityStore;
-  const initializeForm = () => {
-   
-      return {
-        id: '',
-        title: '',
-        category: '',
-        description: '',
-        date: '',
-        city: '',
-        venue: ''
-      };
-    
-  };
+  const {createActivity,updateActivity,loading,loadActivity,loadingInitial}=activityStore;
+  const{id}=useParams<{id:string}>();
+  const [activity, setActivity] = useState<Activity>({
 
-  const [activity, setActivity] = useState<Activity>(initializeForm);
+    id: '',
+    title: '',
+    category: '',
+    description: '',
+    date: '',
+    city: '',
+    venue: ''
+  });
+ 
+
+  useEffect(() => {
+   if(id) loadActivity(id).then(activity=>setActivity(activity!)); 
+   
+  },[id,loadActivity] )
+
+  
 
   const handleSubmit = () => {
     if (activity.id.length === 0) {
@@ -47,6 +53,7 @@ const ActivityForm: React.FC = ({
     setActivity({ ...activity, [name]: value });
   };
 
+  if(loadingInitial) return <LoadingComponent content="Loading activity .."/>
   return (
     <Segment clearing>
       <Form onSubmit={handleSubmit}>

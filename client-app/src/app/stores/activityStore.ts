@@ -81,6 +81,7 @@ export default class ActivityStore
       if(activity)
       {
           this.selectedActivity=activity;
+          return activity;
       }
       else
       {
@@ -88,8 +89,12 @@ export default class ActivityStore
           try{
               activity=await agent.Activities.details(id);
               this.setActivity(activity);
-              this.selectedActivity=activity;
+              runInAction(()=>{
+                this.selectedActivity=activity;
+              })
+            
               this.setLoadingState(false);
+              return activity;
 
           }
           catch(error)
