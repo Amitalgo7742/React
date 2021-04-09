@@ -4,8 +4,9 @@ import { Activity } from '../../../app/models/activity';
 import {v4 as uuid} from 'uuid';
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
+
 
 
 
@@ -13,6 +14,7 @@ const ActivityForm: React.FC = ({
  
 }) => {
   const {activityStore}=useStore();
+  const history=useHistory();
   const {createActivity,updateActivity,loading,loadActivity,loadingInitial}=activityStore;
   const{id}=useParams<{id:string}>();
   const [activity, setActivity] = useState<Activity>({
@@ -40,9 +42,9 @@ const ActivityForm: React.FC = ({
         ...activity,
         id: uuid()
       }; 
-      createActivity(newActivity);
+      createActivity(newActivity).then(()=>history.push(`/activities/${newActivity.id}`));
     } else {
-      updateActivity(activity);
+      updateActivity(activity).then(()=>history.push(`/activities/${activity.id}`));;
     }
   };
 
