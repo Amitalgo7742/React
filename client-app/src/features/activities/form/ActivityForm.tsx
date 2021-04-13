@@ -12,6 +12,7 @@ import MyTextInput from '../../../app/common/form/MyTextInput';
 import MyTextArea from '../../../app/common/form/MyTextArea';
 import MySelectInput from '../../../app/common/form/MySelectInput';
 import { categoryOptions } from '../../../app/common/options/categoryOption';
+import MyDateInput from '../../../app/common/form/MyDateInput';
 
 
 
@@ -66,7 +67,12 @@ const ActivityForm: React.FC = ({
            <MyTextInput name="title" placeholder="Title"/>
            <MyTextArea rows={3} name="description" placeholder="Description"/>
            <MySelectInput options={categoryOptions} name="category" placeholder="Category"/>
-           <MyTextInput name="date" placeholder="Date"/>
+           <MyDateInput name="date" 
+           placeholderText="Date"
+           showTimeSelect
+           timeCaption='time'
+           dateFormat='MMMM d, yyyy h:mm aa'
+           />
            <MyTextInput name="city" placeholder="City"/>
            <MyTextInput name="venue" placeholder="Venue"/>
 
