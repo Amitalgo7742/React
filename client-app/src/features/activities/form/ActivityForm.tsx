@@ -10,6 +10,8 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import MyTextInput from '../../../app/common/form/MyTextInput';
 import MyTextArea from '../../../app/common/form/MyTextArea';
+import MySelectInput from '../../../app/common/form/MySelectInput';
+import { categoryOptions } from '../../../app/common/options/categoryOption';
 
 
 
@@ -63,7 +65,7 @@ const ActivityForm: React.FC = ({
           <Form className="ui form" onSubmit={handleSubmit}>
            <MyTextInput name="title" placeholder="Title"/>
            <MyTextArea rows={3} name="description" placeholder="Description"/>
-           <MyTextInput name="category" placeholder="Category"/>
+           <MySelectInput options={categoryOptions} name="category" placeholder="Category"/>
            <MyTextInput name="date" placeholder="Date"/>
            <MyTextInput name="city" placeholder="City"/>
            <MyTextInput name="venue" placeholder="Venue"/>
