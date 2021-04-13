@@ -1,5 +1,5 @@
 import React, { useState, FormEvent, useEffect } from 'react';
-import { Segment, Button, FormField, Label } from 'semantic-ui-react';
+import { Segment, Button, FormField, Label, Header } from 'semantic-ui-react';
 import { Activity } from '../../../app/models/activity';
 import { v4 as uuid } from 'uuid';
 import { useStore } from '../../../app/stores/store';
@@ -39,11 +39,22 @@ const ActivityForm: React.FC = ({
     title: Yup.string().required("Title of activity is required"),
     category: Yup.string().required("Category of activity is required"),
     description: Yup.string().required("Description of activity is required"),
-    date: Yup.string().required("Date of activity is required"),
+    date: Yup.string().required("Date of activity is required").nullable(),
     city: Yup.string().required("City of activity is required"),
     venue: Yup.string().required("Venu of activity is required"),
 
   })
+  const handleFormSubmit = (activity:Activity) => {
+    if (activity.id.length === 0) {
+      let newActivity = {
+        ...activity,
+        id: uuid()
+      }; 
+      createActivity(newActivity).then(()=>history.push(`/activities/${newActivity.id}`));
+    } else {
+      updateActivity(activity).then(()=>history.push(`/activities/${activity.id}`));;
+    }
+  };
 
 
   useEffect(() => {
@@ -58,10 +69,10 @@ const ActivityForm: React.FC = ({
   if (loadingInitial) return <LoadingComponent content="Loading activity .." />
   return (
     <Segment clearing>
-
+     <Header content="Activity Details" sub color="teal"/>
       <Formik validationSchema={validationSchema}
-        enableReinitialize initialValues={activity} onSubmit={value => console.log(value)}>
-        {({ handleSubmit }) =>
+        enableReinitialize initialValues={activity} onSubmit={value => handleFormSubmit(value)}>
+        {({ handleSubmit,isValid,isSubmitting,dirty }) =>
         (
           <Form className="ui form" onSubmit={handleSubmit}>
            <MyTextInput name="title" placeholder="Title"/>
@@ -73,10 +84,13 @@ const ActivityForm: React.FC = ({
            timeCaption='time'
            dateFormat='MMMM d, yyyy h:mm aa'
            />
+           <Header content="Location Details" sub color="teal"/>
            <MyTextInput name="city" placeholder="City"/>
            <MyTextInput name="venue" placeholder="Venue"/>
 
-            <Button loading={loading} floated='right' positive type='submit' content='Submit' />
+            <Button 
+            disabled={isSubmitting||!dirty|| !isValid}
+            loading={loading} floated='right' positive type='submit' content='Submit' />
             <Button
               as={Link}
               to='/activities'
