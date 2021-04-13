@@ -30,7 +30,7 @@ const ActivityForm: React.FC = ({
     title: '',
     category: '',
     description: '',
-    date: '',
+    date: null,
     city: '',
     venue: ''
   });
