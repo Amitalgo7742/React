@@ -5,11 +5,18 @@ using System.Security.Claims;
 using Domain;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Extensions.Configuration;
 
 namespace API.Services
 {
     public class TokenService
     {
+        private readonly IConfiguration _config;
+        public TokenService(IConfiguration config)
+        {
+            _config = config;
+        }
+
         public string CreateToken(AppUser user)
         {
             var claims = new List<Claim>
@@ -19,16 +26,16 @@ namespace API.Services
                     new Claim(ClaimTypes.Email,user.Email),
 
             };
-            var key=new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super secret key"));
-            var creds=new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);
-            var tokenDescriptor=new SecurityTokenDescriptor
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject= new ClaimsIdentity(claims),
-                Expires=DateTime.Now.AddDays(7),
-                SigningCredentials=creds
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(7),
+                SigningCredentials = creds
             };
-            var tokenHandler=new JwtSecurityTokenHandler();
-            var token=tokenHandler.CreateToken(tokenDescriptor);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
     }
