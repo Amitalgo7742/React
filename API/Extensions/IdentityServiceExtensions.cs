@@ -1,3 +1,4 @@
+using API.Services;
 using Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +17,7 @@ namespace API.Extensions
               .AddEntityFrameworkStores<DataContext>()
               .AddSignInManager<SignInManager<AppUser>>();
               services.AddAuthentication();
+              services.AddScoped<TokenService>();
               return services;
          }
     }
