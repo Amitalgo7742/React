@@ -12,7 +12,8 @@ export default function HomePage()
 
             </Header>
             <Header as='h2' inverted content='welcome to reactivities'/>
-            <Button as={Link} to='/activities' size='huge' inverted content='See Activities'/>
+            <Button as={Link} to='/login' size='huge' inverted content='Take me to Login'/>
+            
            </Container>
 
        </Segment>
