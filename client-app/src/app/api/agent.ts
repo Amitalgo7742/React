@@ -86,5 +86,5 @@ const Account=
 }
 
 export default {
-    Activities
+    Activities,Account
 }
