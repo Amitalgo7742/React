@@ -1,6 +1,7 @@
+import {config} from 'dotenv/types';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { SSL_OP_EPHEMERAL_RSA } from 'node:constants';
-import { config } from 'node:process';
+
 import React from 'react';
 import { toast } from 'react-toastify';
 import { history } from '../..';
@@ -9,6 +10,13 @@ import { User, UserFormValues } from '../models/user';
 import { store } from '../stores/store';
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
+
+axios.interceptors.request.use(config =>{
+    const token=store.commonStore.token;
+    if(token) config.headers.Authorization=`Bearer ${token}`
+    return config;
+})
+
 const sleep=(delay:number)=>{
 return new Promise((resolve)=>{
     setTimeout(resolve,delay);
